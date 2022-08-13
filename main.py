@@ -41,8 +41,9 @@ det_list = [[], [], [], [], [], [], [], [],
             ["Out", "In"], [],
             ["Retracted", "Inserted"], [],
             ["Retracted", "Inserted"],
-            ["Retracted", "Inserted"], [],
+            ["Raised", "Lowered"], [],
             ["Retracted", "Inserted"]]
+
 
 
 class UpdaterThread(QObject):
@@ -64,11 +65,8 @@ class Window(QMainWindow, Ui_MainWindow):
         super().__init__(parent)
         self.setupUi(self)
         self.setPalette(ui.palette.PALETTE)
-        #self._update()
-        #self.statusBar().showMessage("Connected")
-        apt.SelectKind(2)
-        print(apt.kind)
-        apt.SetSize(1)
+        # self._update()
+        # self.statusBar().showMessage("Connected")
 
         self.apt_icons = [self.CL1Apt,
                        self.CL2Apt,
@@ -78,6 +76,7 @@ class Window(QMainWindow, Ui_MainWindow):
                        None,
                        self.HXApt,
                        self.BFApt]
+
         self.det_icons = [None, None, None, None, None, None, None, None,
                           self.BS, None,
                           self.DFDet, None,
@@ -105,7 +104,7 @@ class Window(QMainWindow, Ui_MainWindow):
 
         if gun.emission_value:
             self.Bkg.setPixmap(QPixmap("ui/bkg-valveclosed.png"))
-            if feg.GetBeamValve() == 1:
+            if feg.GetBeamValve():
                 self.Bkg.setPixmap(QPixmap("ui/bkg-fscreendown.png"))
                 if det.GetPosition(12) == 0:
                     self.Bkg.setPixmap(QPixmap("ui/bkg-lscreendown.png"))
