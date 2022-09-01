@@ -1,5 +1,5 @@
 """Module loading QPalette."""
-from PyQt5.QtGui import QColor, QPalette
+from PyQt4.QtGui import QColor, QPalette
 
 _palette = QPalette()
 
