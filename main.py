@@ -15,7 +15,7 @@ except ImportError:
     from PyJEM.offline import detector
     from PyJEM.offline import TEM3
 
-POLLING = 2000
+POLLING = 2000 # ms
 
 stage = TEM3.Stage3()
 EOS = TEM3.EOS3()
@@ -25,6 +25,8 @@ def3 = TEM3.Def3()
 feg = TEM3.FEG3()
 gun = TEM3.GUN3()
 HT = TEM3.HT3()
+
+# Miroscope Detector/ Aperture Configuration:
 
 aperture_list = [0, 1, 3, 4, 6, 7]
 apt_list = [["Out", "150um", "100um", "70um", "10um"],  # CL1Apt
@@ -36,13 +38,15 @@ apt_list = [["Out", "150um", "100um", "70um", "10um"],  # CL1Apt
             ["Out", "500um", "200um"],  # HXApt
             ["Out", "5-2.5mm", "3mm", "2mm", "1mm"]]  # BFApt
 
-detector_list = [8, 10, 12, 13, 15]
+detector_list = [8, 10, 11, 12, 13, 15]
 det_list = [[], [], [], [], [], [], [], [],
-            ["Out", "In"], [],
-            ["Retracted", "Inserted"], [],
-            ["Retracted", "Inserted"],
-            ["Raised", "Lowered"], [],
-            ["Retracted", "Inserted"]]
+            ["Out", "In"],  # Beam Stop
+            [],
+            ["Out", "In"], # DF
+            ["Out", "In"], # BF
+            ["Retracted", "Inserted"], # Small Screen
+            ["Raised", "Lowered"] # large Screen
+            ]
 
 
 
@@ -143,9 +147,10 @@ class Window(QMainWindow, Ui_MainWindow):
         self.BSButton.setText(det_list[8][det.GetPosition(8)])
 
         self.DFButton.setText(det_list[10][det.GetPosition(10)])
+        self.BFButton.setText(det_list[11][det.GetPosition(11)])
+
         self.FScreenButton.setText(det_list[12][det.GetPosition(12)])
         self.LScreenButton.setText(det_list[13][det.GetPosition(13)])
-        self.BFButton.setText(det_list[15][det.GetPosition(15)])
         # Get Aperture Positions
         # GetExpSize:
         # 0:CL1, 1:CL2, 2:OL(OL Upper), 3:HC(OL Lower), 4:SA, 5:ENT, 6:HX, 7:BF, 8:AUX1, 9:AUX2, 10:AUX3, 11:AUX4
@@ -158,7 +163,7 @@ class Window(QMainWindow, Ui_MainWindow):
                     icon.setHidden(True)
             i += 1
 
-        self.CL1Button.setText(apt_list[0][apt.GetSize(0)])
+        self.CL1Button.setText(apt_list[0][apt.GetSize(0)]) # GetExpSize? difference?
         self.CL2Button.setText(apt_list[1][apt.GetSize(1)])
         self.HXButton.setText(apt_list[6][apt.GetSize(6)])
         self.OLButton.setText(apt_list[3][apt.GetSize(3)])
