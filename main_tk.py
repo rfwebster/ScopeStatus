@@ -212,7 +212,7 @@ class ScopeStatus:
             self.canvas.itemconfig(self.beamvalve_item, state="normal")
         
         # update the sample insertion state
-        if _online
+        if _online:
             if microscope.stage.GetHolderStts() == 1:
                 self.canvas.itemconfig(self.sample_state_item, text="In")
                 self.canvas.itemconfig(self.sample_item, state="normal")
