@@ -17,7 +17,7 @@ gun = TEM3.GUN3()
 HT = TEM3.HT3()
 
 # for offline testing:
-if _online == False:
+if not _online:
     HT.SetHtValue(300) # turn off on microsocpe!
     gun.SetFilamentVal(3) # test use the filament, on FEG doesnt work
     # beam valve
@@ -26,14 +26,14 @@ if _online == False:
     det.SetPosition(10,1) # ADF
     det.SetPosition(15,1) # BF
     det.SetPosition(8,1)  # BS
-    det.SetPosition(12,0) # FScreen
+    det.SetPosition(12,1) # FScreen
     det.SetPosition(13,1) # LScreen
-
 
     # select mode
     EOS.SelectTemStem(0)
     EOS.SelectFunctionMode(1)
     EOS.SetSelector(36)
+
     # insert an aperture
     apt.SelectKind(3)
     apt.SetSize(2)
@@ -159,7 +159,7 @@ FScreen_Det = {
     "State" : ["Retracted", "Inserted"],
     "Image" : "ui/fscreen.png",
     "Xpos"  : 155,
-    "Ypos"  : 450,
+    "Ypos"  : 460,
 }
 
 detector_list = [BS_Det, ADF_Det, BF_Det, LScreen_Det, FScreen_Det]
