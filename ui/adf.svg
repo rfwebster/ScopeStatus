@@ -7,9 +7,9 @@
    width="150"
    height="20"
    viewBox="0 0 150 20"
-   sodipodi:docname="apt.svg"
+   sodipodi:docname="adf.svg"
    inkscape:version="1.2 (dc2aedaf03, 2022-05-15)"
-   inkscape:export-filename="apt.png"
+   inkscape:export-filename="adf.png"
    inkscape:export-xdpi="96"
    inkscape:export-ydpi="96"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
@@ -28,13 +28,13 @@
      inkscape:pagecheckerboard="1"
      inkscape:deskcolor="#d1d1d1"
      showgrid="false"
-     inkscape:zoom="8.6428572"
-     inkscape:cx="96.61157"
-     inkscape:cy="35.578512"
+     inkscape:zoom="24.445692"
+     inkscape:cx="68.723767"
+     inkscape:cy="7.9564123"
      inkscape:window-width="1958"
      inkscape:window-height="1230"
-     inkscape:window-x="1467"
-     inkscape:window-y="204"
+     inkscape:window-x="391"
+     inkscape:window-y="278"
      inkscape:window-maximized="0"
      inkscape:current-layer="g2017" />
   <g
@@ -42,9 +42,9 @@
      inkscape:label="Image"
      id="g2017">
     <path
-       id="rect4723"
-       style="fill:#e3e3e3;fill-opacity:1;stroke:#000000;stroke-width:1;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none"
-       d="M 73.777516,6.7597656 H 65.3 v 6.4804684 h 89.07419 V 6.7597656 H 76.029516 m 0,1.7089844 c 3.689643,0.097176 4.041571,0.7515919 4.074,1.53125 -8.61e-4,0.859761 -1.099461,1.356998 -5.2,1.357 -4.100539,-2e-6 -5.299139,-0.497239 -5.3,-1.357 0.03243,-0.7796581 0.484357,-1.4340737 4.174,-1.53125"
-       sodipodi:nodetypes="ccccccccscc" />
+       id="path2073"
+       style="fill:#f9ffb3;fill-opacity:1;stroke:#000000;stroke-width:1;stroke-dasharray:none"
+       d="M 74,2.6640625 C 45.517683,2.7454824 22.662232,6.005524 22.652344,10 22.652999,14.053677 46.089551,17.339796 75,17.339844 103.91045,17.339796 127.34701,14.053677 127.34766,10 127.34216,5.9865364 104.62089,2.7178608 76,2.6621094 m 0,5.6328125 C 82.435393,8.3488586 87.185179,9.0960514 87.189453,10 87.188379,10.943846 81.73142,11.708921 75,11.708984 68.26858,11.708921 62.811621,10.943846 62.810547,10 62.816171,9.1145832 67.709532,8.3763429 74,8.2988281"
+       sodipodi:nodetypes="cccccccccc" />
   </g>
 </svg>
