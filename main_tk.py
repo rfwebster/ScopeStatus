@@ -155,9 +155,7 @@ class ScopeStatus:
 
         # Background
 
-        # if microscope.gun.GetEmissionCurrentValue():
-                 
-        if microscope.gun.GetFilamentVal():
+        if (microscope.gun.GetEmissionCurrentValue() and _online) or microscope.gun.GetFilamentVal():
             self.bg_image = ImageTk.PhotoImage(Image.open("ui/bkg-bv.png").convert("RGBA"))
             if microscope.feg.GetBeamValve():
                 self.bg_image = ImageTk.PhotoImage(Image.open("ui/bkg-fscreen.png").convert("RGBA"))
@@ -214,14 +212,14 @@ class ScopeStatus:
             self.canvas.itemconfig(self.beamvalve_item, state="normal")
         
         # update the sample insertion state
-        """
-        if microscope.stage.GetHolderStts() == 1:
-            self.canvas.itemconfig(self.sample_state_item, text="In")
-            self.canvas.itemconfig(self.sample_item, state="normal")
-        else:
-            self.canvas.itemconfig(self.sample_state_item, text="Out")
-            self.canvas.itemconfig(self.sample_item, state="hidden")
-        """
+        if _online
+            if microscope.stage.GetHolderStts() == 1:
+                self.canvas.itemconfig(self.sample_state_item, text="In")
+                self.canvas.itemconfig(self.sample_item, state="normal")
+            else:
+                self.canvas.itemconfig(self.sample_state_item, text="Out")
+                self.canvas.itemconfig(self.sample_item, state="hidden")
+        
 
         # update aperture states
         for apt in microscope.aperture_list:

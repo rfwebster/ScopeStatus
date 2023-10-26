@@ -16,27 +16,27 @@ feg = TEM3.FEG3()
 gun = TEM3.GUN3()
 HT = TEM3.HT3()
 
-# for testing:
-HT.SetHtValue(300) # turn off on microsocpe!
-gun.SetFilamentVal(3) # test use the filament, on FEG doesnt work
-# beam valve
-feg.SetBeamValve(1)
-# insert detectors
-det.SetPosition(10,1) # ADF
-det.SetPosition(15,1) # BF
-det.SetPosition(8,1)  # BS
-det.SetPosition(12,0) # FScreen
-det.SetPosition(13,1) # LScreen
+# for offline testing:
+if _online == False:
+    HT.SetHtValue(300) # turn off on microsocpe!
+    gun.SetFilamentVal(3) # test use the filament, on FEG doesnt work
+    # beam valve
+    feg.SetBeamValve(1)
+    # insert detectors
+    det.SetPosition(10,1) # ADF
+    det.SetPosition(15,1) # BF
+    det.SetPosition(8,1)  # BS
+    det.SetPosition(12,0) # FScreen
+    det.SetPosition(13,1) # LScreen
 
 
-# select mode
-EOS.SelectTemStem(0)
-EOS.SelectFunctionMode(1)
-EOS.SetSelector(36)
-# insert an aperture
-apt.SelectKind(3)
-apt.SetSize(2)
-
+    # select mode
+    EOS.SelectTemStem(0)
+    EOS.SelectFunctionMode(1)
+    EOS.SetSelector(36)
+    # insert an aperture
+    apt.SelectKind(3)
+    apt.SetSize(2)
 
 
 # CL1_Apt = {
@@ -47,6 +47,12 @@ apt.SetSize(2)
 #     "Xpos"  : the x position of the labels
 #     "Ypos"  : the y position of the labels
 # }
+
+"""
+Aperture Indexes:
+0:CL1, 1:CL2, 2:OL(OL Upper), 3:HC(OL Lower), 4:SA, 5:ENT, 
+6:HX, 7:BF, 8:AUX1, 9:AUX2, 10:AUX3, 11:AUX4
+"""
 
 CL1_Apt = {
     "Index" : 0,
@@ -104,6 +110,12 @@ BF_Apt = {
 
 aperture_list = [CL1_Apt, CL2_Apt, OL_Apt, SA_Apt, HX_Apt, BF_Apt]
 
+"""
+Detector Configurations:
+1:SEI, 2:EDS, 3:BI-PRISM, 4:DFI-EF, 5:TVCAM-U, 6:SSCAM-U, 7:FARADAY-CAGE, 8:BS, 9:HRD, 
+10:DFI-U, 11:BFI-U, 12:SCR-F, 13:SCR-L, 14:DFI-B, 15:BFI-B, 16:SSCAM-B,17:TVCAM-B, 18:EELS, 19:TVCAM-GIF, 
+20:SSCAM-GIF, 21:BEI-TOPO, 22:BEI-COMPO, 23:SEI-TOPO, 24:SEI-COMPO
+"""
 
 BS_Det = {
     "Index" : 8,
