@@ -1,6 +1,8 @@
 import sys
 import tkinter as tk
-from PIL import ImageTk, Image
+import PIL
+from PIL import ImageTk
+from PIL import Image
 import microscope
 
 try:
@@ -12,7 +14,7 @@ except ImportError:
     from PyJEM.offline import detector
     from PyJEM.offline import TEM3
 
-POLLING = 2000
+POLLING = 5000
 
 
 
@@ -20,18 +22,23 @@ POLLING = 2000
 class ScopeStatus:
     def __init__(self):
         self.root = tk.Tk()
-        self.root.geometry("500x710")
+        self.root.geometry("500x720")
         self.root.title("ScopeStatus")
         self.root.resizable(False, False)
         self.root.configure(bg="black")
+        self.root.attributes("-topmost", True)
+
+
         # Load the default background image
-        self.bg_image = ImageTk.PhotoImage(Image.open("ui/bkg-beam.png").convert("RGBA"))
-        self.beamvalve_image = ImageTk.PhotoImage(Image.open("ui/bv.png").convert("RGBA"))
-        self.sample_image = ImageTk.PhotoImage(Image.open("ui/sample.png").convert("RGBA"))
+        self.bg_image = ImageTk.PhotoImage(Image.open("ui/bkg-beam.png").convert("RGBA"), master=self.root)
+        self.beamvalve_image = ImageTk.PhotoImage(Image.open("ui/bv.png").convert("RGBA"), master=self.root)
+        self.sample_image = ImageTk.PhotoImage(Image.open("ui/sample.png").convert("RGBA"), master=self.root)
         self.setup_ui()
         self.setup_canvas()
 
         self.update()
+        self.root.mainloop()
+
     
     def setup_ui(self):
         # Fonts
@@ -40,8 +47,8 @@ class ScopeStatus:
         text_font = ("Arial", 10, "bold")
         normal_font = ("Arial", 10)
         # Status #############################################################
-        self.status_frame = tk.Frame(self.root, bg="black")
-        self.status_frame.pack(padx=10, pady=20, anchor="nw")
+        self.status_frame = tk.Frame(self.root, width=150, bg="black")
+        self.status_frame.pack(padx=10, pady=20, anchor="nw", fill=None, expand=False)
         
         self.status_frame.grid_columnconfigure(0, minsize=75)
         self.status_frame.grid_columnconfigure(1, minsize=75)
@@ -137,7 +144,7 @@ class ScopeStatus:
         for apt in microscope.aperture_list:
             text_item = self.canvas.create_text(apt["Xpos"]+110, apt["Ypos"]-10, text=apt["Name"], fill="white", font=canvas_font)
             size_item = self.canvas.create_text(apt["Xpos"]+110, apt["Ypos"]+5, text=apt["Size"][0], fill="white")
-            img = ImageTk.PhotoImage(Image.open(apt["Image"]).convert("RGBA"))
+            img = ImageTk.PhotoImage(Image.open(apt["Image"]).convert("RGBA"), master=self.root)
             image_item = self.canvas.create_image(apt["Xpos"], apt["Ypos"], image=img)
 
             apt.update({"text_item": text_item, 
@@ -148,7 +155,7 @@ class ScopeStatus:
         for det in microscope.detector_list:
             text_item = self.canvas.create_text(det["Xpos"]-110, det["Ypos"]-10, text=det["Name"], fill="white", font=canvas_font)
             size_item = self.canvas.create_text(det["Xpos"]-110, det["Ypos"]+5, text=det["State"][0], fill="white")
-            img = ImageTk.PhotoImage(Image.open(det["Image"]).convert("RGBA"))
+            img = ImageTk.PhotoImage(Image.open(det["Image"]).convert("RGBA"), master=self.root)
             image_item = self.canvas.create_image(det["Xpos"], det["Ypos"], image=img)
 
             det.update({"text_item": text_item,
@@ -163,15 +170,15 @@ class ScopeStatus:
         # Background
 
         if (microscope.gun.GetEmissionCurrentValue() and _online) or microscope.gun.GetFilamentVal():
-            self.bg_image = ImageTk.PhotoImage(Image.open("ui/bkg-bv.png").convert("RGBA"))
+            self.bg_image = ImageTk.PhotoImage(Image.open("ui/bkg-bv.png").convert("RGBA"), master=self.root)
             if microscope.feg.GetBeamValve():
-                self.bg_image = ImageTk.PhotoImage(Image.open("ui/bkg-fscreen.png").convert("RGBA"))
+                self.bg_image = ImageTk.PhotoImage(Image.open("ui/bkg-fscreen.png").convert("RGBA"), master=self.root)
                 if microscope.det.GetPosition(12) == 0:
-                    self.bg_image = ImageTk.PhotoImage(Image.open("ui/bkg-lscreen.png").convert("RGBA"))
+                    self.bg_image = ImageTk.PhotoImage(Image.open("ui/bkg-lscreen.png").convert("RGBA"), master=self.root)
                     if microscope.det.GetPosition(13) == 0:
-                        self.bg_image = ImageTk.PhotoImage(Image.open("ui/bkg-beam.png").convert("RGBA"))
+                        self.bg_image = ImageTk.PhotoImage(Image.open("ui/bkg-beam.png").convert("RGBA"), master=self.root)
         else:
-            self.bg_image = ImageTk.PhotoImage(Image.open("ui/bkg.png").convert("RGBA"))
+            self.bg_image = ImageTk.PhotoImage(Image.open("ui/bkg.png").convert("RGBA"), master=self.root)
 
         # Update the background image
         self.canvas.itemconfig(self.bg_item, image=self.bg_image)
@@ -179,37 +186,41 @@ class ScopeStatus:
 
 
         pos = microscope.stage.GetPos()
-        self.xy_label.config(text=f"X, Y = [{pos[0]}, {pos[1]}]")
-        self.z_label.config(text=f"Z = {pos[2]}")
-        self.tx_label.config(text=f"TX = {pos[3]}")
-        self.ty_value.config(text=f"TY = {pos[4]}")
+        self.xy_label.config(text="X, Y = [{0:.1f}, {1:.1f}] um".format(pos[0]/1000, pos[1]/1000))
+        self.z_label.config(text="Z = {0:.1f} um".format(pos[2]/1000))
+        self.tx_label.config(text="TX = {0:.1f}".format(pos[3]/1000))
+        self.ty_value.config(text="TY = {0:.1f}".format(pos[4]))
 
         sf_pos = microscope.stage.GetPiezoPosi()
-        self.sf_label.config(text=f"Super Fine = {sf_pos}")
+        self.sf_label.config(text="SFX = {0:.1f} SFY = {1:.1f} nm".format(sf_pos[0],sf_pos[1]))
 
 
         # update the HT label
-        self.ht_value.config(text=f"{microscope.HT.GetHtValue()} kV")
-        self.a1_value.config(text=f"{microscope.gun.GetAnode1CurrentValue()} kV")
-        self.a2_value.config(text=f"{microscope.gun.GetAnode2CurrentValue()} kV")
+        self.ht_value.config(text="{0:g} kV".format(microscope.HT.GetHtValue()/1000))
+        self.a1_value.config(text="{0:.2f} kV".format(microscope.gun.GetAnode1CurrentValue()))
+        self.a2_value.config(text="{0:.2f} kV".format(microscope.gun.GetAnode2CurrentValue()))
         emission = microscope.gun.GetEmissionCurrentValue()
-        self.emission_value.config(text=f"{emission} uA")
+        self.emission_value.config(text="{0:.2f} uA".format(emission))
         if 0 < emission < 12:
             self.emission_label.config(fg="orange") # orange indicates do a flash
 
 
         mode = "TEM" if microscope.EOS.GetTemStemMode() == 0 else "STEM"
-        self.mode_label.config(text=f"{mode}")
+        self.mode_label.config(text="{}".format(mode))
         
 
         if mode == "STEM":
-            self.mag_label.config(text=f"{microscope.EOS.GetFunctionMode()[1]} - {microscope.EOS.GetMagValue()}") # need to test on microscope
-            self.camlength_label.config(text=f"{microscope.EOS.GetStemCamValue()}")
-            self.probesize_label.config(text=f"Probe: {microscope.EOS.GetSpotSize()+1}") # need to test on microscope
+            sub_mode = microscope.EOS.GetFunctionMode()
+            self.mag_label.config(text="{} - {}".format(sub_mode[1],microscope.EOS.GetMagValue()[2])) # need to test on microscope
+            self.camlength_label.config(text="{}".format(microscope.EOS.GetStemCamValue()[2]))
+            if sub_mode[0] == 2:
+                self.probesize_label.config(text="Probe: {}".format(microscope.EOS.GetSpotSize()+6))
+            else:
+                self.probesize_label.config(text="Probe: {}".format(microscope.EOS.GetSpotSize()+1)) # need to test on microscope
         if mode == "TEM":
-            self.mag_label.config(text=f"{microscope.EOS.GetFunctionMode()[1]} - {microscope.EOS.GetMagValue()[2]}")
-            self.camlength_label.config(text=f"{microscope.EOS.GetAlphaSelectorEx()[1]}")
-            self.probesize_label.config(text=f"Spot: {microscope.EOS.GetSpotSize()+1}") # need to test on microscope
+            self.mag_label.config(text="{} - {}".format(microscope.EOS.GetFunctionMode()[1], microscope.EOS.GetMagValue()[2]))
+            self.camlength_label.config(text="{}".format(microscope.EOS.GetAlphaSelectorEx()[1]))
+            self.probesize_label.config(text="Spot: {}".format(microscope.EOS.GetSpotSize()+1)) # need to test on microscope
         
         
         # update the beam valve state
@@ -231,7 +242,7 @@ class ScopeStatus:
         # update aperture states
         for apt in microscope.aperture_list:
             if _online:
-                microscope.apt.SelectExpKind(apt["Index"])
+                #microscope.apt.SelectExpKind(apt["Index"])
                 size = microscope.apt.GetExpSize(apt["Index"])
             else:
                 microscope.apt.SelectKind(apt["Index"])
@@ -257,9 +268,7 @@ class ScopeStatus:
         # wait and update!
         self.root.after(POLLING, self.update)
 
-    def run(self):
-        self.root.mainloop()
+       
 
 if __name__ == "__main__":
     scope = ScopeStatus()
-    scope.run()

@@ -2,6 +2,7 @@ try:
     _online = True
     from PyJEM import detector
     from PyJEM import TEM3
+    print(detector.get_attached_detector())
 except ImportError:
     _online = False
     from PyJEM.offline import detector
@@ -136,7 +137,7 @@ ADF_Det = {
 }
 
 BF_Det = {
-    "Index" : 15,
+    "Index" : 11,
     "Name" : "BF",
     "State" : ["Retracted", "Inserted"],
     "Image" : "ui/bf.png",
